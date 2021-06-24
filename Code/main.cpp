@@ -1,5 +1,5 @@
 #include<iostream>
-#include<time.h>
+#include<ctime>
 #include<cmath>
 using namespace std;
 
@@ -90,9 +90,7 @@ class AntColonySystem
 private:
 	double info[N][N], visible[N][N];//节点之间的信息素强度,节点之间的能见度
 public:
-	AntColonySystem()
-	{
-	}
+
 	//计算当前节点到下一节点转移的概率
 	double Transition(int i, int j);
 	//局部更新规则
@@ -130,11 +128,11 @@ void AntColonySystem::InitParameter(double value)
 		for (int j = 0; j < N; j++)
 		{
 			info[i][j] = value;
-			info[j][i] = value;
+
 			if (i != j)
 			{
 				visible[i][j] = 1.0 / allDistance[i][j];
-				visible[j][i] = visible[i][j];
+				//visible[j][i] = visible[i][j];
 			}
 		}
 	}
@@ -323,23 +321,27 @@ double CalAdjacentDistance(int node)
 
 //---------------------------------结束---------------------------------------------
 
-//--------------------------主函数--------------------------------------------------
+
 int main()
 {
-	srand(time(0));
-	time_t timer = clock();
+	//srand(time(0));
+	//time_t timer = clock();
 
 	//由矩阵表示两两城市之间的距离
 	calculateAllDistance();
+
+
+
 	//蚁群系统对象
 	AntColonySystem* acs = new AntColonySystem();
 	ACSAnt* ants[M];
+
 	//蚂蚁均匀分布在城市上
 	for (int k = 0; k < M; k++)
 	{
 		ants[k] = new ACSAnt(acs, (int)(k%N));
 	}
-	calculateAllDistance();
+
 	//随机选择一个节点计算由最近邻方法得到的一个长度
 	int node = rand() % N;
 	Lnn = CalAdjacentDistance(node);
@@ -388,7 +390,7 @@ int main()
 			globalBestLength = localBestLength;
 		}
 		acs->UpdateGlobalPathRule(*globalTour, globalBestLength);
-		//输出所有蚂蚁循环一次后的迭代最优路径
+
 
 	}
 
